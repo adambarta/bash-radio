@@ -1,6 +1,16 @@
 #!/bin/bash
 
+if [[ $# -lt 1 ]];
+then
+  echo "usage: "$0" directory"
+  exit 1
+fi
 
+if [ ! -d $1 ];
+then
+  echo "directory not valid"
+  exit 1
+fi
 
 DIR=$1
 
@@ -18,7 +28,7 @@ do
   done
 
   cat "$DIR/${LIST[$N]}"
-  sleep 1;
+
   LAST=$N
 
 done
