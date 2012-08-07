@@ -27,7 +27,7 @@ do
     N=$[$RANDOM%$SIZE]
   done
 
-  cat "$DIR/${LIST[$N]}"
+  cat "$DIR/\"${LIST[$N]}\""
 
   LAST=$N
 
