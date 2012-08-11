@@ -35,6 +35,12 @@ example usage
       "lame --mp3input --preset cbr 128 -s 44.1 --bitwidth 16 - - 
        | streamer 1 host port pass mount"
 
+
+streaming webcam with cvlc to icecast2
+
+  cvlc v4l2:// --sout "#transcode{vcodec=theo,fps=15,vb=28,scale=1,width=320,height=240,acodec=none}:std{access=shout,mux=ogg,dst=source:password@host:port//mount}"
+
+
 w0rd
 
   pshr.co
