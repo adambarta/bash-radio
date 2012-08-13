@@ -27,6 +27,10 @@ do
     N=$[$RANDOM%$SIZE]
   done
 
+  echo "${LIST[$N]}" >> $DIR/../track
+
+#  sleep 1
+
   cat "$DIR/${LIST[$N]}"
 
   LAST=$N
