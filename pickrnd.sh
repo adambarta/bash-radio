@@ -20,7 +20,8 @@ while (true)
 do
   LIST=($(ls $DIR))
   SIZE=${#LIST[@]}
-  N=$[$RANDOM%$SIZE]
+ # N=$[$RANDOM%$SIZE]
+  N=$(( $(cat /dev/urandom | od -N1 -An -i) % $SIZE ))
 
   until [ $N -ne $LAST ];
   do
