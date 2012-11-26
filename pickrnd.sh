@@ -1,4 +1,5 @@
 #!/bin/bash
+trap "echo chaning track; ps uax | grep cat $DIR" SIGHUP
 
 if [[ $# -lt 1 ]];
 then
@@ -32,7 +33,7 @@ do
 
 #  sleep 1
 
-  cat "$DIR/${LIST[$N]}"
+  (cat "$DIR/${LIST[$N]}")
 
   LAST=$N
 
