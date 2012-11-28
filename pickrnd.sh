@@ -29,7 +29,7 @@ do
     N=$[$RANDOM%$SIZE]
   done
 
-  echo "${LIST[$N]}" >> $DIR/../track
+  echo $(date +%F-%T)" ${LIST[$N]}" >> $DIR/../track
 
 #  sleep 1
 
