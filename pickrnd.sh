@@ -1,4 +1,5 @@
 #!/bin/bash
+trap "echo chaning track; ps uax | grep cat $DIR" SIGHUP
 
 if [[ $# -lt 1 ]];
 then
@@ -28,11 +29,11 @@ do
     N=$[$RANDOM%$SIZE]
   done
 
-  echo "${LIST[$N]}" >> $DIR/../track
+  echo $(date +%F-%T)" ${LIST[$N]}" >> $DIR/../track
 
 #  sleep 1
 
-  cat "$DIR/${LIST[$N]}"
+  (cat "$DIR/${LIST[$N]}")
 
   LAST=$N
 
