@@ -65,6 +65,8 @@ int main(int argc, char *argv[])
 
   while (run){
   
+    if (nl)
+
     n = scandir(dir, &nl, 0, alphasort);
     if (n < 0){
       fprintf(stderr, "e: %s\n", strerror(errno)); 
