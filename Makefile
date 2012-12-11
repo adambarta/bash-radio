@@ -9,6 +9,9 @@ fan: fan.c
 streamer: streamer.c
 	gcc -o $@ $^ -lshout $(CFLAGS)
 
+ar: ar.c
+	gcc -o $@ $^ $(CFLAGS)
+
 clean:
 	rm fan streamer
 

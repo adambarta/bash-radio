@@ -61,11 +61,18 @@ int main(int argc, char *argv[])
   on = 0;
   tries = 0;
 
- // srandom(random());
+  srand(atoi(argv[1]));
 
+  do {
+    
+    fprintf(stdout, "%d\n", rand());
+    
+  } while (tries++ < 10);
+    
+
+#if 0
   while (run){
   
-    if (nl)
 
     n = scandir(dir, &nl, 0, alphasort);
     if (n < 0){
@@ -84,7 +91,7 @@ int main(int argc, char *argv[])
 
     tries = 0;
 rndize:
-    rnd = random() % n;
+    rnd = rand() % n;
 
     on = n;
 
@@ -107,10 +114,10 @@ rndize:
     
     ornd[rnd] = 1;
 
-    fprintf(stderr, "%s\n", nl[rnd]->d_name);
+    fprintf(stderr, "[%d] %s\n", tries, nl[rnd]->d_name);
 
   }
-
+#endif
   
 
 #if 0
