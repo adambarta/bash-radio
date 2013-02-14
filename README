@@ -23,6 +23,17 @@ BASH - Radio
     oggenc -r -b 128 -B 16 -C 2 -R 44100 --raw-endianness 0 -
       convert raw pcm from stdin to ogg vorbis on stdout
 
+    m4a to mp3
+      ffmpeg -i filename.m4a -acodec libmp3lame -ab 320k filename.mp3
+      for f in *.m4a; do avconv -i "$f" -b 256k "${f%.m4a}.mp3"; done
+      (ls|grep m4a) | while read f ; do (avconv -i "$f" -b 320k -c:a libmp3lame "${f%.m4a}".mp3); done
+
+    rencode mp3
+      for f in *.mp3; do lame --mp3input --preset cbr 320 -s 44.1 --bitwidth 16 "$f" "$f"; done
+
+    WAV to MP3
+      for f in *.wav; do avconv -i "$f" -b 320k -c:a libmp3lame "${f%.wav}".mp3; done
+
     
 example usage
 

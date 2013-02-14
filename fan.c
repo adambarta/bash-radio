@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define BUF 4096
+#define BUF 1024
 
 static volatile int run = 0;
 

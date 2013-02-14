@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
 	shout_t *shout;
-	char buff[4096];
+	char buff[1024];
 	long read, ret, total;
 
   if (argc < 4){
