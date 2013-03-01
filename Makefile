@@ -1,7 +1,7 @@
 
 CFLAGS=-O2
 
-all: fan streamer
+all: fan streamer ar
 
 fan: fan.c
 	gcc -o $@ $^ $(CFLAGS)
@@ -13,5 +13,5 @@ ar: ar.c
 	gcc -o $@ $^ $(CFLAGS)
 
 clean:
-	rm fan streamer
+	rm fan streamer ar
 
