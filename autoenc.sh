@@ -3,7 +3,7 @@
 set -ex
 
 WATCHDIR=/srv/beats/chunes/upload
-OUTPUT=/srv/beats/chunes/encode
+OUTPUT=/srv/beats/chunes/live
 ORIG=/srv/beats/chunes/original
 BPS=160
 BPSK=160k
