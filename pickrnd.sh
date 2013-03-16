@@ -39,7 +39,7 @@ do
   MP3=${LIST[$N]}
 # OGG=${MP3%%.mp3}.ogg
 # coproc PROC_OGG ( cat $OGG > /srv/ogg )
-  coproc PROC_MP3 ( cat $MP3 > /srv/mp3 )
+  coproc PROC_MP3 ( cat $MP3 > /srv/beats/mp3 )
 
   PIDS="$PROC_MP3_PID" #$PROC_OGG_PID"
 
