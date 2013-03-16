@@ -16,6 +16,7 @@ fi
 
 DIR=$1
 
+FIFO=/srv/beats/mp3
 LAST=0
 
 while (true) 
@@ -33,26 +34,28 @@ do
 
   echo $(date +%F-%T)" $(basename ${LIST[$N]} .mp3)" >> $DIR/../track
 
-#  sleep 1
 
   #(cat "$DIR/${LIST[$N]}")
   MP3=${LIST[$N]}
+
+  cat $MP3
+
 # OGG=${MP3%%.mp3}.ogg
 # coproc PROC_OGG ( cat $OGG > /srv/ogg )
-  coproc PROC_MP3 ( cat $MP3 > /srv/beats/mp3 )
+  #coproc PROC_MP3 ( cat $MP3 )
 
-  PIDS="$PROC_MP3_PID" #$PROC_OGG_PID"
+  #PIDS="$PROC_MP3_PID" #$PROC_OGG_PID"
 
   #trap "echo changing track; kill ${PIDS[0]}; kill ${PIDS[1]}" SIGHUP
-  trap "echo changing track; kill ${PIDS[0]}" SIGHUP
+  #trap "echo changing track; kill ${PIDS[0]}" SIGHUP
 
-  echo "PIDs: "$PIDS" TRAc: "$MP3
+  #echo "PIDs: "$PIDS" TRAc: "$MP3
 
-  for PID in $PIDS
-    do
-      #echo $PID
-      wait $PID
-    done
+#  for PID in $PIDS
+#    do
+#      #echo $PID
+#      wait $PID
+#    done
 
   #sleep 5
 
