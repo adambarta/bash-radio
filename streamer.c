@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+reopen:
 	if (shout_open(shout) == SHOUTERR_SUCCESS) {
 		fprintf(stderr, "Connected to server...\n");
 		total = 0;
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
 				if (ret != SHOUTERR_SUCCESS) {
 					fprintf(stderr, "DEBUG: Send error: %s\n", shout_get_error(shout));
 					//break;
+          goto reopen;
 				}
 			} else {
 				//break;
