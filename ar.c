@@ -61,16 +61,16 @@ int main(int argc, char *argv[])
   on = 0;
   tries = 0;
 
-  srand(atoi(argv[1]));
-
-  do {
-    
-    fprintf(stdout, "%d\n", rand());
-    
-  } while (tries++ < 10);
-    
+  //srand(atoi(argv[1]));
+  srand(time(NULL));
 
 #if 0
+  do {
+    fprintf(stdout, "%d\n", rand());
+  } while (tries++ < 10);
+#endif
+
+#if 1
   while (run){
   
 
