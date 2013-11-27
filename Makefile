@@ -1,17 +1,17 @@
 CFLAGS=-O2
-CFLAGS=-ggdb
-CFLAGS=-DDEBUG
+CFLAGS+=-ggdb
+CFLAGS+=-DDEBUG
 
 all: fan streamer ar symer
 
 fan: fan.c
-	gcc -o $@ $^ $(CFLAGS)
+	gcc $(CFLAGS) -o $@ $^
 
 streamer: streamer.c
-	gcc -o $@ $^ -lshout $(CFLAGS)
+	gcc $(CFLAGS) -o $@ $^ -lshout
 
 ar: ar.c
-	gcc -o $@ $^ $(CFLAGS)
+	gcc $(CFLAGS) -I/home/adam/work/spead/src -o $@ $^ -lspead
 
 symer: symer.c
 	gcc $(CFLAGS) -I/home/adam/work/spead/src -o $@ $^ -lspead

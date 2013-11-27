@@ -10,6 +10,9 @@
 
 #include <sys/mman.h>
 
+#include <queue.h>
+#include <spead_api.h>
+
 static int run = 1;
 
 void handle_us()
@@ -42,100 +45,53 @@ int main(int argc, char *argv[])
   
   long int rnd;
 
-  int n, on, tries;
-  
-  int *ornd;
+  int n, i;
 
   if (register_signals() < 0){
     fprintf(stderr, "e: signals\n");
     return EX_USAGE;
   }
+  
+  if(argc == 2)
+    dir = argv[1];
+  else
+    return 0;
 
-  dir = get_current_dir_name();
-  if (dir == NULL){
-    fprintf(stderr, "e: %s\n", strerror(errno)); 
-    return EX_USAGE;
-  }
-
-  ornd = NULL;
-  on = 0;
-  tries = 0;
-
-  //srand(atoi(argv[1]));
   srand(time(NULL));
 
-#if 0
-  do {
-    fprintf(stdout, "%d\n", rand());
-  } while (tries++ < 10);
-#endif
+  n = scandir(dir, &nl, 0, alphasort);
+  if (n < 0){
+    fprintf(stderr, "e: %s\n", strerror(errno)); 
+    //goto fnl;
+    return 1;
+  }
 
-#if 1
-  while (run){
-  
+  struct priority_queue *pq;
+  struct dirent *data;
 
-    n = scandir(dir, &nl, 0, alphasort);
-    if (n < 0){
-      fprintf(stderr, "e: %s\n", strerror(errno)); 
-      goto fnl;
-    }
-    
-    if (ornd == NULL || n != on){
-      ornd = realloc(ornd, n*sizeof(int));
-      if (ornd == NULL){
-        fprintf(stderr, "e: %s\n", strerror(errno)); 
-        goto fnl;
-      }
-      memset(ornd, 0, n*sizeof(int));
-    }
+  pq = create_priority_queue();
 
-    tries = 0;
-rndize:
+  for (i=0; i<n; i++){
     rnd = rand() % n;
-
-    on = n;
-
-    switch (nl[rnd]->d_name[0]){
-      case '.':
-        //fprintf(stderr, "dot file %s\n", nl[rnd]->d_name);
-        continue;
-    }
-    
-    if (ornd[rnd] != 0){
-      tries++;
-      if (tries == n){
-        tries = 0;
-        memset(ornd, 0, n*sizeof(int));
-        run = 0;
-        goto end;
-      }
-      goto rndize;
-    }
-    
-    ornd[rnd] = 1;
-
-    fprintf(stderr, "[%d] %s\n", tries, nl[rnd]->d_name);
-
+    insert_with_priority_queue(pq, rnd, nl[i]);
   }
-#endif
-  
 
-#if 0
+  for (i=0; i<n; i++){
+    if (pull_highest_priority(pq, (void **) &data) == 0){
+      if (data->d_name[0] != '.')
+        fprintf(stdout, "%s\n", data->d_name);
+    }
+  }
+  
   while(n--){
-    fprintf(stderr, "%s\n", nl[n]->d_name);
+    if (nl[n])
+      free(nl[n]);
   }
-#endif
-end:
-  if (ornd)
-    free(ornd);
-  
-fnl:
   if (nl)
     free(nl);
 
-fd:
-  if (dir)
-    free(dir);
-  
+  destroy_priority_queue(pq, NULL);
+  destroy_shared_mem();
+
   return 0;
 }
