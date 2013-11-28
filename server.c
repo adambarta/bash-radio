@@ -75,7 +75,6 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-
   while (run){
   
     c = accept_spead_socket(x);
@@ -90,6 +89,7 @@ int main(int argc, char * argv[])
         
         /*child*/
         case 0:
+          /*child process takes over the accept object*/
           child_process(c);
           break;
 
@@ -98,6 +98,8 @@ int main(int argc, char * argv[])
 #ifdef DEBUG
           fprintf(stderr, "%s: close the child fd on the parent\n", __func__);
 #endif
+          /*server closes the file descriptor and frees the object but doesn't 
+            shutdown the connection from accept*/
           close(c->c_fd);
           free(c);
           break;
