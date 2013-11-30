@@ -39,15 +39,87 @@ int register_signals()
 
 void child_process(struct spead_client *cl)
 {
+#define BUFF   1024
+#define REPLY   "HTTP/1.1 200 OK\nServer: pshr\nConnection: Keep-Alive\nContent-Type: audio/mp3\n\n"
+#define MODE_CONNECTING 0
+#define MODE_SENDING    1  
+  int bytes, mode = MODE_CONNECTING;
+  char data[BUFF];
+
+
 #ifdef DEBUG
   fprintf(stderr, "%s: child created with fd[%d]\n", __func__, cl->c_fd);
 #endif
+  
+
+  while (run){
+
+    switch (mode){
+      
+      case MODE_CONNECTING:
+        
+        bytes = read(cl->c_fd, data, BUFF);
+        switch (bytes){
+          case 0:
+#ifdef DEBUG
+            fprintf(stderr, "%s: read EOF client[%s:%d]\n", __func__, get_client_address(cl), get_client_port(cl));
+#endif
+            exit(EXIT_SUCCESS);
+            break;
+
+          case -1:
+#ifdef DEBUG
+            fprintf(stderr, "%s: read error client[%s:%d] (%s)\n", __func__, get_client_address(cl), get_client_port(cl), strerror(errno));
+#endif
+            exit(EXIT_SUCCESS);
+            break;
+        }
+
+#ifdef DEBUG
+        fprintf(stderr, "%s: [%s:%d] [%s]\n", __func__, get_client_address(cl), get_client_port(cl), data);
+#endif
+
+        bytes = write(cl->c_fd, REPLY, sizeof(REPLY));
+        switch(bytes){
+          case -1:
+#ifdef DEBUG
+            fprintf(stderr, "%s: read error client[%s:%d] (%s)\n", __func__, get_client_address(cl), get_client_port(cl), strerror(errno));
+#endif
+            exit(EXIT_SUCCESS);
+            break;
+        }
+        
+        
+
+        
+        mode = MODE_CONNECTING;
+
+        break;
+
+
+      case MODE_SENDING:
+
+      
+         
+        break;
+
+    }
+
+  }
+
+
+#if 0
   write(cl->c_fd, "hello\n", 6);
-  sleep(10);
+  sleep(3);
   write(cl->c_fd, "byee\n", 5);
 #ifdef DEBUG
   fprintf(stderr, "%s: child[%d] ending\n", __func__, getpid());
 #endif
+#endif
+
+
+  destroy_spead_client(cl);
+  //shutdown(cl->c_fd, SHUT_RDWR);
   exit(EXIT_SUCCESS);
 }
 

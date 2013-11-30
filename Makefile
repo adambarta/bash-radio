@@ -21,5 +21,5 @@ server: server.c
 	gcc $(CFLAGS) -I/home/adam/work/spead/src -o $@ $^ -lspead
 
 clean:
-	rm fan streamer ar symer core
+	rm -f fan streamer ar symer core server
 
