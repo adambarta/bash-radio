@@ -1,9 +1,11 @@
+#define _GNU_SOURCE 
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 #include <signal.h>
 #include <dirent.h>
 #include <sysexits.h>
+#include <unistd.h>
+#include <string.h>
 
 #include <stack.h>
 #include <spead_api.h>
@@ -13,6 +15,7 @@ struct newpaths {
   struct stack *paths;
 };
 
+static char *filstr;
 static int run = 1;
 
 void handle_us()
@@ -39,7 +42,16 @@ int register_signals()
 
 int print_help(char *name)
 {
-  fprintf(stderr, "usage:\n\t%s -o [output directory] [input directories]\n\n", name); 
+  fprintf(stderr, "usage:\n\t%s -f [filter str] -o [output directory] [input directories]\n\n", name); 
+  return 0;
+}
+
+int filter_fn(const struct dirent *fn)
+{
+  if (fn == NULL || fn->d_name == NULL)
+    return 0;
+  if (memmem(fn->d_name, strlen(fn->d_name), filstr, strlen(filstr)) != NULL)
+    return 1;
   return 0;
 }
 
@@ -50,7 +62,6 @@ int setup_symlinks(void *so, void *data)
   int n, len, nlen;
   
   struct newpaths *nps;
-
   
   dir     = so;
   nps     = data;
@@ -62,7 +73,7 @@ int setup_symlinks(void *so, void *data)
 
   odir    = nps->odir;
 
-  n = scandir(dir, &namelist, NULL, alphasort);
+  n = scandir(dir, &namelist, &filter_fn, alphasort);
   if (n < 0){
 #ifdef DEUBG
     fprintf(stderr, "%s: error (%s)\n", __func__, strerror(errno));
@@ -166,6 +177,7 @@ int main(int argc, char *argv[])
   i     = 1;
   j     = 1;
   odir  = NULL;
+  filstr= NULL;
 
   dirlist   = create_stack();
   nps.paths = create_stack();
@@ -189,6 +201,7 @@ int main(int argc, char *argv[])
           destroy_shared_mem();
           return print_help(argv[0]);
 
+        case 'f': //filter string
         case 'o':
           j++;
           if (argv[i][j] == '\0'){
@@ -205,6 +218,9 @@ int main(int argc, char *argv[])
           switch(c){
             case 'o':
               odir = argv[i] + j;
+              break;
+            case 'f':
+              filstr = argv[i] + j;
               break;
           }
           i++;

@@ -1,6 +1,7 @@
 CFLAGS=-O2
 CFLAGS+=-ggdb
 CFLAGS+=-DDEBUG
+CFLAGS+=-DIKATCP
 CFLAGS+=-fstack-protector
 CFLAGS+=-Wall
 
